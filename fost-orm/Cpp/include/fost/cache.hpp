@@ -123,10 +123,6 @@ namespace fostlib {
         instance_type *operator -> ();
         /// Allow underlying value to be fetched
         instance_type const *operator -> () const;
-        /// Allow underlying value to be fetched
-        instance_type &operator * ();
-        /// Allow underlying value to be fetched
-        const instance_type &operator * () const;
 
     private:
         nullable< key_type > m_key;
@@ -148,7 +144,8 @@ namespace std {
             return o << "NULL";
         else
             throw fostlib::exceptions::not_implemented(
-                "osream << for fostlib::object_ptr");
+                "osream << for fostlib::object_ptr"
+            );
     }
 }
 

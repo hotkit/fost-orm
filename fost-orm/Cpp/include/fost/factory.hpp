@@ -26,12 +26,8 @@ namespace fostlib {
 
         class FOST_SCHEMA_DECLSPEC FSL_ABSTRACT factory_base {
         protected:
-            factory_base(
-                const enclosure &enc, const std::type_info &,
-                const nullable< string > &name );
-            factory_base(
-                const factory_base &enc, const std::type_info &,
-                const nullable< string > &name );
+            factory_base( const enclosure &enc, const std::type_info &, const nullable< string > &name );
+            factory_base( const factory_base &enc, const std::type_info &, const nullable< string > &name );
 
             virtual ~factory_base();
 
@@ -44,17 +40,14 @@ namespace fostlib {
             boost::shared_ptr< meta_instance > meta() const;
 
         private:
-            typedef boost::variant< const enclosure *, const factory_base * >
-                container_type;
+            typedef boost::variant< const enclosure *, const factory_base * > container_type;
             container_type m_container;
             nullable< string > m_name;
             mutable boost::shared_ptr< meta_instance > m_meta;
         };
 
-        FOST_SCHEMA_DECLSPEC const factory_base &find_factory
-            ( const std::type_info &type );
-        FOST_SCHEMA_DECLSPEC const factory_base &find_factory
-            ( const string &name );
+        FOST_SCHEMA_DECLSPEC const factory_base &find_factory( const std::type_info &type );
+        FOST_SCHEMA_DECLSPEC const factory_base &find_factory( const string &name );
 
 
     }
@@ -84,14 +77,13 @@ namespace fostlib {
         std::auto_ptr< instance_type > operator () ( const json &j ) const {
             json js( j );
             ( jcursor() / L"_meta" / L"type_info" ).insert( js, string( m_type.name() ) );
-            return std::auto_ptr< instance_type >( new instance_type( initialiser(js) ) );
+            return std::auto_ptr< instance_type >( new instance_type( js ) );
         }
     };
 
     template< typename T >
     const factory< T > &find_factory() {
-        return dynamic_cast< const factory< T > & >
-            ( detail::find_factory( typeid( T ) ) );
+        return dynamic_cast< const factory< T > & >( detail::find_factory( typeid( T ) ) );
     }
 
 

@@ -1,5 +1,5 @@
 /*
-    Copyright 2009-2010, Felspar Co Ltd. http://fost.3.felspar.com/
+    Copyright 2009, Felspar Co Ltd. http://fost.3.felspar.com/
     Distributed under the Boost Software License, Version 1.0.
     See accompanying file LICENSE_1_0.txt or copy at
         http://www.boost.org/LICENSE_1_0.txt
@@ -19,10 +19,10 @@ FSL_TEST_SUITE( basic_attributes );
 namespace {
     class SimpleModel : public model< SimpleModel > {
     public:
-        SimpleModel( const fostlib::initialiser &init )
-        : model_type( init ),
-            pk( this, init.data() ),
-            display_name( this, init.data() ) {
+        SimpleModel( const fostlib::json &j )
+        : model_type( j ),
+            pk( this, j ),
+            display_name( this, j ) {
         }
         FSL_ATTRIBUTE_PK( pk, int64_t );
         FSL_ATTRIBUTE_NULL( display_name, string );
@@ -32,9 +32,9 @@ namespace {
 
     class SubModel : public model< SubModel, SimpleModel > {
     public:
-        SubModel( const fostlib::initialiser &init )
-        : model_type( init ),
-            name( this, init.data() ) {
+        SubModel( const fostlib::json &j )
+        : model_type( j ),
+            name( this, j ) {
         }
         FSL_ATTRIBUTE_NOT_NULL( name, string );
     };
@@ -44,8 +44,7 @@ namespace {
 
 FSL_TEST_FUNCTION( meta ) {
     boost::shared_ptr< meta_instance > simple = s_factory_sm.meta();
-    // We don't know what the name will be, but there should be one
-    FSL_CHECK( simple->name().length() );
+    FSL_CHECK( simple->name().length() ); // We don't know what the name will be, but there should be one
 
     boost::shared_ptr< meta_instance > submodel = s_factory_sub.meta();
     FSL_CHECK_EQ( submodel->name(), "SubModel" );
